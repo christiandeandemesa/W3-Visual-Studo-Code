@@ -1,7 +1,6 @@
 class BankAccount:
     all_accounts = []
-    def __init__(self="Christian Demesa", int_rate=1.01, balance=2000): 
-        self.name = self
+    def __init__(self, int_rate, balance): 
         self.int_rate = int_rate
         self.balance = balance
         BankAccount.all_accounts.append(self)
@@ -27,10 +26,24 @@ class BankAccount:
         for account in cls.all_accounts:
             account.display_account_info()
 
-christian = BankAccount()
-bianca = BankAccount("Bianca Demesa")
+class User:
+    def __init__(self, name):
+        self.name = name
+        self.account = {
+            "saving" : BankAccount(1.01, 2000),
+            "checking" : BankAccount(1.03, 500)
+        }
+    def display_user_balance(self):
+        print(f"User: {self.name}, Saving: {self.account['saving'].display_account_info()}")
+        print(f"User: {self.name}, Checking: {self.account['checking'].display_account_info()}")
+        return self
+    def transfer_money(self, other_user, amount):
+        self.account -= amount
+        other_user.account += amount
+        return self
 
-christian.deposit(60).deposit(20).deposit(45).withdraw(20).yield_interest(1.01).display_account_info()
-bianca.deposit(1000).deposit(1500).withdraw(100).withdraw(200).withdraw(50).withdraw(45).yield_interest(1.01).display_account_info()
+christian = User("christian")
 
-BankAccount.display_inst()
+christian.account['saving'].deposit(100).display_account_info()
+christian.account['checking'].withdraw(100).display_account_info()
+christian.display_user_balance()
