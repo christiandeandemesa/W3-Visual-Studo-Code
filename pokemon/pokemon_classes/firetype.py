@@ -1,38 +1,40 @@
 import random
 class FireType:
 
-    def __init__(self, name):
+    def __init__(self, name, attack, defense, defense_original, special_attack, special_defense, hp, original_hp):
         self.name = name
-        self.strength = 30
-        self.defense = 5
-        self.health = 100
-        self.original_health = 100
-    
-    def show_stats(self):
-        print(f"Name: {self.name}\nStrength: {self.strength}\nDefense: {self.defense}\nHealth: {self.health}/{self.original_health}\n")
+        self.attack = attack
+        self.defense = defense
+        self.defense_original = defense_original
+        self.special_attack = special_attack
+        self.special_defense = special_defense
+        self.hp = hp
+        self.original_hp = original_hp
 
+    def show_stats(self):
+        print(f"Name: {self.name}\nAttack: {self.attack}\nDefense: {self.defense}\nSp. Atk: {self.special_attack}\nSp. Def: {self.special_defense}\nHP: {self.hp}/{self.original_hp}\n")
+    
     def flamethrower(self, watertype):
-        watertype.health -= (self.strength - watertype.defense)/1.5
-        print(f"{self.name} used flamethrower!\nIt's not very effective.\n")
+        watertype.hp -= round(((90+self.special_attack)/watertype.special_defense)/1.5)
+        print(f"\n{self.name} used flamethrower!\nIt's not very effective.\n")
         return self
 
     def scratch(self, watertype):
-        watertype.health -= (self.strength - watertype.defense)
-        print(f"{self.name} used scratch!\n")
+        watertype.hp -= round((40+self.attack)/watertype.defense)
+        print(f"\n{self.name} used scratch!\n")
         return self
 
     def tail_whip(self, watertype):
-        watertype.defense -= 2
-        print(f"{self.name} used tail whip!\n")
+        watertype.defense -= round(watertype.defense_original/6)
+        print(f"\n{self.name} used tail whip!\nThe opponent's defense was lowered!\n")
         return self
 
     def guillotine(self, watertype):
-        print(f"{self.name} used guillotine!")
-        if watertype.health <= 40:
-            watertype.health = 0
+        print(f"\n{self.name} used guillotine!")
+        if watertype.hp <= 20:
+            watertype.hp = 0
             print(f"It's a one-hit KO!\n")
         else:
-            pass
             print(f"{self.name}'s guillotine missed.\n")
         return self
     
@@ -41,12 +43,9 @@ class FireType:
         random_num = random.randint(0,len(attacks)-1)
         attacks[random_num](watertype)
 
-    def fire_death(self):
-        if self.health <= 0:
-            print(f"{self.name} is unable to battle.\n")
-        else:
-            pass
+    def death(self):
+        print(f"{self.name} is unable to battle.\n")
         return self
 
-    def fire_win(self):
+    def win(self):
         print(f"{self.name} won the battle!\n")
